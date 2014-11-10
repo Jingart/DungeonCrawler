@@ -11,16 +11,17 @@ TileMap::~TileMap(void)
 }
 
 
-bool TileMap::BuildTiles()
+bool TileMap::LoadAndBuildTileMap(string appPath)
 {
 	//Success flag
 	bool tilesLoaded = true;
+	Tile *tile = 0;
 
     //The tile offsets
     int x = 0, y = 0;
 
     //Open the map
-    ifstream mapStream( "39_tiling/lazy.map" );
+    ifstream mapStream( appPath + "/dungeon.map" );
 
     //If the map couldn't be loaded
     if( mapStream == NULL )
@@ -51,7 +52,8 @@ bool TileMap::BuildTiles()
 			//If the number is a valid tile number
 			if( ( tileType >= 0 ) && ( tileType < TOTAL_TILE_SPRITES ) )
 			{
-				mTileSet[ i ] = new Tile( x, y, tileType );
+				tile = new Tile( x, y, TILE_WIDTH, TILE_HEIGHT, tileType );
+				mTileSet.push_back(*tile);
 			}
 			//If we don't recognize the tile type
 			else
@@ -142,8 +144,32 @@ bool TileMap::BuildTiles()
 	}
 
     //Close the file
-    map.close();
+    mapStream.close();
 
     //If the map was loaded fine
     return tilesLoaded;
+}
+
+
+void TileMap::SetTileTexture(Texture &tileTextureAtlas)
+{
+	mTileTextureAtlas = &tileTextureAtlas;
+}
+
+
+void TileMap::Render()
+{
+	SDL_Rect camera = { 50, 50, SCREEN_WIDTH, SCREEN_HEIGHT };
+	SDL_Rect backgroundRect = { 0, 0, Graphics::SCREEN_WIDTH, Graphics::SCREEN_HEIGHT };
+	for( int i = 0; i < TOTAL_TILES; ++i )
+	{
+		//mTileSet[i]->render( camera );
+		//mTileSet[i].render(camera, mTileTextureClips, mTileTextureAtlas);
+
+		SDL_Rect t = mTileSet[i].getBox();
+		mTileTextureAtlas->render( t.x - camera.x, t.y - camera.y, &mTileTextureClips[ mTileSet[i].getType() ] );
+
+		/*mTileTextureAtlas.render(0, 0, &backgroundRect);*/
+	}
+
 }

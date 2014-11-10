@@ -11,11 +11,12 @@
 #include "GameTimer.h"
 #include "Texture.h"
 #include "Graphics.h"
-#include "Tile.h"
+#include "TileMap.h"
 
 using namespace std;
 
 Texture gTileTexture;
+TileMap gTileMap; 
 GameTimer gTimer;
 //vector<Tile> *gTileSet;
 //Spaceship gShip;
@@ -55,16 +56,15 @@ bool loadMedia()
 
 	string appPath = getApplicationPath();
 
-	//Load texture
-	//if( !gLanderTexture.loadFromFile( appPath + "\\Assets\\lander3.png" ) ){
-	//	printf( "Failed to load lander texture!\n" );
-	//	success = false;
-	//}
+	//Load tile texture
+	if( !gTileTexture.loadFromFile( appPath + "\\tiles.png" ) )
+	{
+		printf( "Failed to load tile set texture!\n" );
+		success = false;
+	}
 
-	//if( !gStarfieldTexture.loadFromFile( appPath + "\\Assets\\starfield.png" ) ){
-	//	printf( "Failed to load starfield texture!\n" );
-	//	success = false;
-	//}
+	gTileMap.SetTileTexture(gTileTexture);
+	gTileMap.LoadAndBuildTileMap(appPath);
 
 	return success;
 }
@@ -162,6 +162,10 @@ int main( int argc, char* args[] )
 				SDL_RenderClear( Graphics::gRenderer );
 
 
+				
+				gTileMap.Render();
+
+
 				//Render red filled quad
 				//SDL_Rect fillRect = { 50, 50, 50, 50 };
 				//SDL_SetRenderDrawColor( Graphics::gRenderer, 0xFF, 0x00, 0x00, 0xFF );		
@@ -169,8 +173,8 @@ int main( int argc, char* args[] )
 
 
 				//Render objects
-				//gStarfieldTexture.
-				SDL_Rect backgroundRect = { 0, 0, Graphics::SCREEN_WIDTH, Graphics::SCREEN_HEIGHT };
+				//SDL_Rect backgroundRect = { 0, 0, Graphics::SCREEN_WIDTH, Graphics::SCREEN_HEIGHT };
+				//gTileTexture.render(0, 0, &backgroundRect);
 
 				//gStarfieldTexture.render(0,0,&backgroundRect);
 				//gShip.Render(gLanderTexture);
