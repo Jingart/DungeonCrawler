@@ -57,7 +57,7 @@ bool loadMedia()
 	string appPath = getApplicationPath();
 
 	//Load tile texture
-	if( !gTileTexture.loadFromFile( appPath + "\\tiles.png" ) )
+	if( !gTileTexture.loadFromFile( appPath + "\\assets\\texture_atlas.png" ) )
 	{
 		printf( "Failed to load tile set texture!\n" );
 		success = false;
