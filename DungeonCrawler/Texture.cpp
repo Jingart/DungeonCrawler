@@ -41,9 +41,19 @@ bool Texture::loadFromFile( std::string path )
 	}
 	else
 	{
-		//Color key image
-		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
+		//SDL_Rect final_size;
+		//final_size.w = 200;
+		//final_size.h = 50;
+		//final_size.x = 0;
+		//final_size.y = 0;
+		//SDL_BlitScaled(loadedSurface, NULL, loadedSurface, &final_size);
+
+		//Color key image
+		//SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+
+		//loadedSurface = SDL_ConvertSurface( loadedSurface, loadedSurface->format, NULL );
+	
 		//Create texture from surface pixels
         newTexture = SDL_CreateTextureFromSurface( Graphics::gRenderer, loadedSurface );
 		if( newTexture == NULL )
@@ -150,6 +160,11 @@ void Texture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* cen
 	SDL_RenderCopyEx( Graphics::gRenderer, mTexture, clip, &renderQuad, angle, center, flip );
 }
 
+void Texture::renderBox( SDL_Rect* box, SDL_Rect* clip)
+{
+	SDL_RenderCopy( Graphics::gRenderer, mTexture, clip, box);
+}
+
 int Texture::getWidth()
 {
 	return mWidth;
@@ -159,3 +174,4 @@ int Texture::getHeight()
 {
 	return mHeight;
 }
+

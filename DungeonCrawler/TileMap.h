@@ -18,15 +18,16 @@ public:
 	//static const int SCREEN_WIDTH = 640; 
 	//static const int SCREEN_HEIGHT = 480; 
 
-	//The dimensions of the level 
-	static const int LEVEL_WIDTH = 144; 
-	static const int LEVEL_HEIGHT = 144; 
-
 	//Tile constants 
-	static const int TILE_WIDTH = 16; 
-	static const int TILE_HEIGHT = 16; 
+	static const int TILE_WIDTH = 32; 
+	static const int TILE_HEIGHT = 32; 
+
 	static const int TOTAL_TILES = 81; 
 	static const int TOTAL_TILE_SPRITES = 10; 
+
+	//The dimensions of the level 
+	static const int LEVEL_WIDTH = TILE_WIDTH * 9; 
+	static const int LEVEL_HEIGHT = TILE_HEIGHT * 9; 
 
 	//The different tile sprites 
 	//static const int TILE_RED = 0; 

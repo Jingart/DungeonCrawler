@@ -1,22 +1,23 @@
 #pragma once
 #include <SDL.h>
-#include <SDL_image.h>
+//#include <SDL_image.h>
 
 #include <stdio.h>
 #include <string>
 #include <iostream>
-#include <windows.h>
+//#include <windows.h>
 #include <vector>
 
 #include "GameTimer.h"
-#include "Texture.h"
+#include "Textures.h"
 #include "Graphics.h"
 #include "TileMap.h"
+#include "Utils.h"
 
 using namespace std;
 
-Texture gTileTexture;
-TileMap gTileMap; 
+Textures gTileTextures;
+Texture gtex;
 GameTimer gTimer;
 //vector<Tile> *gTileSet;
 //Spaceship gShip;
@@ -28,45 +29,19 @@ bool initSDL()
 	bool success = true;
 
 	SDL_Init( SDL_INIT_VIDEO );
-	SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
-	Graphics::gWindow = SDL_CreateWindow( "MoonLander", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Graphics::SCREEN_WIDTH, Graphics::SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+	Graphics::gWindow = SDL_CreateWindow( "DungeonCrawler", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Graphics::SCREEN_WIDTH, Graphics::SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 	Graphics::gRenderer = SDL_CreateRenderer( Graphics::gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 	SDL_SetRenderDrawColor( Graphics::gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "best" );
 
 	return success;
-}
-
-string getApplicationPath()
-{
-	char buffer[MAX_PATH];
-	GetModuleFileName( NULL, buffer, MAX_PATH );
-
-	char *pos = strrchr(buffer, '\\');
-	if (pos != NULL) 
-	   *pos = '\0';
-
-	string appPath(buffer);
-	return appPath;
 }
 
 bool loadMedia()
 {
-	//Loading success flag
-	bool success = true;
-
-	string appPath = getApplicationPath();
-
-	//Load tile texture
-	if( !gTileTexture.loadFromFile( appPath + "\\assets\\texture_atlas.png" ) )
-	{
-		printf( "Failed to load tile set texture!\n" );
-		success = false;
-	}
-
-	gTileMap.SetTileTexture(gTileTexture);
-	gTileMap.LoadAndBuildTileMap(appPath);
-
+	bool success = gTileTextures.LoadTextures();
 	return success;
+
 }
 
 void close()
@@ -119,78 +94,56 @@ void Update(const Uint8* keystate)
 
 int main( int argc, char* args[] )
 {
-	//Init timer by reseting
+
 	gTimer.Reset();
 
-	//Start up SDL and create window
 	if( !initSDL() )
 	{
 		printf( "Failed to initialize!\n" );
 	}
 	else
 	{
-		//Load media
-		if( !loadMedia() )
+
+		loadMedia();
+
+		/***************************
+		Manual object init for testing
+		****************************/
+		TileMap tileMap;
+		tileMap.SetTileTexture(*gTileTextures.GetTexture(Textures::DUNGEON_MAP_TEST_32));
+		//tileMap.SetTileTexture(gtex);
+		tileMap.LoadAndBuildTileMap(Utils::GetApplicationPath());
+
+		/***************************
+		****************************/
+
+
+		bool quit = false;
+		while( !quit )
 		{
-			printf( "Failed to load media!\n" );
-		}
-		else
-		{	
-			//Main loop flag
-			bool quit = false;
+			SDL_PumpEvents(); 
 
-			//While application is running
-			while( !quit )
-			{
-				SDL_PumpEvents(); 
+			const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
-				// Keyboard state!
-				const Uint8* keystate = SDL_GetKeyboardState(NULL);
-
-				if (SDL_QuitRequested()){
-					quit = true;
-					continue;
-				}
-
-				//Tick timer forward
-				gTimer.Tick();
-
-				Update(keystate);
-
-				//Clear screen
-				SDL_SetRenderDrawColor( Graphics::gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-				SDL_RenderClear( Graphics::gRenderer );
-
-
-				
-				gTileMap.Render();
-
-
-				//Render red filled quad
-				//SDL_Rect fillRect = { 50, 50, 50, 50 };
-				//SDL_SetRenderDrawColor( Graphics::gRenderer, 0xFF, 0x00, 0x00, 0xFF );		
-				//SDL_RenderFillRect( Graphics::gRenderer, &fillRect );
-
-
-				//Render objects
-				//SDL_Rect backgroundRect = { 0, 0, Graphics::SCREEN_WIDTH, Graphics::SCREEN_HEIGHT };
-				//gTileTexture.render(0, 0, &backgroundRect);
-
-				//gStarfieldTexture.render(0,0,&backgroundRect);
-				//gShip.Render(gLanderTexture);
-
-				//Update screen
-				SDL_RenderPresent( Graphics::gRenderer );
+			if (SDL_QuitRequested()){
+				quit = true;
+				continue;
 			}
+
+			gTimer.Tick();
+
+			Update(keystate);
+
+			SDL_SetRenderDrawColor( Graphics::gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+			SDL_RenderClear( Graphics::gRenderer );
+				
+			tileMap.Render();
+
+			SDL_RenderPresent( Graphics::gRenderer );
+			
 		}
 	}
 
-	//Free resources and close SDL
 	close();
-
-	//if(!success)
-	string str;
-	cin >> str;
-
 	return 0;
 }
