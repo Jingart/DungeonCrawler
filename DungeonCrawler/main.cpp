@@ -13,12 +13,15 @@
 #include "Graphics.h"
 #include "TileMap.h"
 #include "Utils.h"
+#include "World.h"
+#include "Character.h"
 
 using namespace std;
 
 Textures gTileTextures;
 Texture gtex;
 GameTimer gTimer;
+World *gWorld;
 //vector<Tile> *gTileSet;
 //Spaceship gShip;
 
@@ -48,6 +51,8 @@ void close()
 {
 	//Free loaded images
 	//gLanderTexture.free();
+	gWorld->~World();
+	gTileTextures.~Textures();
 
 	//Destroy window	
 	SDL_DestroyRenderer( Graphics::gRenderer );
@@ -106,13 +111,22 @@ int main( int argc, char* args[] )
 
 		loadMedia();
 
+		gWorld = new World();
+
 		/***************************
 		Manual object init for testing
 		****************************/
-		TileMap tileMap;
-		tileMap.SetTileTexture(*gTileTextures.GetTexture(Textures::DUNGEON_MAP_TEST_32));
-		//tileMap.SetTileTexture(gtex);
-		tileMap.LoadAndBuildTileMap(Utils::GetApplicationPath());
+
+		TileMap* tileMap;
+		tileMap = new TileMap();
+		tileMap->SetTileTexture(*gTileTextures.GetTexture(Textures::DUNGEON_MAP_TEST_32));
+		tileMap->LoadAndBuildTileMap(Utils::GetApplicationPath());
+		gWorld->SetDungeonMap(tileMap);
+
+		Character* hero;
+		hero = new Character();
+		hero->SetMapPosition(1, 1);
+		gWorld->AddWorldCharacter(hero);
 
 		/***************************
 		****************************/
@@ -137,7 +151,7 @@ int main( int argc, char* args[] )
 			SDL_SetRenderDrawColor( Graphics::gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 			SDL_RenderClear( Graphics::gRenderer );
 				
-			tileMap.Render();
+			gWorld->Render();
 
 			SDL_RenderPresent( Graphics::gRenderer );
 			
