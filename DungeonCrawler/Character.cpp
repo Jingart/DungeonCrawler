@@ -14,7 +14,6 @@ Character::Character(void)
 	mPosX = 0;
 	mPosY= 0;
 
-
 }
 
 
@@ -28,8 +27,18 @@ void Character::SetMapPosition(int x, int y)
 	mMapX = x;
 	mMapY = y;
 
-	mCharacter.x = x;
-	mCharacter.y = y;
+	if(!mMapTilePositions.empty())
+	{
+		SDL_Rect tile = mMapTilePositions[x][y];
+		mCharacter.x = tile.x - mCharacter.w / 2;
+		mCharacter.y = tile.y - mCharacter.h / 2;
+	}
+}
+
+
+void Character::SetMapTilePositions(vector< vector<SDL_Rect> > tilePositions)
+{
+	mMapTilePositions = tilePositions;
 }
 
 

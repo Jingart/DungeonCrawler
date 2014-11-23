@@ -125,7 +125,8 @@ int main( int argc, char* args[] )
 
 		Character* hero;
 		hero = new Character();
-		hero->SetMapPosition(1, 1);
+		hero->SetMapTilePositions(tileMap->GetMapTilePositions());
+		hero->SetMapPosition(8, 2);
 		gWorld->AddWorldCharacter(hero);
 
 		/***************************

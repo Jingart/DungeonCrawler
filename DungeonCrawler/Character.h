@@ -1,6 +1,9 @@
 #pragma once
 #include <SDL.h>
 #include "Graphics.h"
+#include <vector>
+
+using namespace std;
 
 class Character
 {
@@ -9,6 +12,7 @@ public:
 	~Character(void);
 
 	void SetMapPosition(int x, int y);
+	void SetMapTilePositions(vector< vector<SDL_Rect> > tilePositions);
 
 	void Render();
 
@@ -20,5 +24,7 @@ private:
 	int mPosY;
 
 	SDL_Rect mCharacter;
+
+	vector< vector<SDL_Rect> > mMapTilePositions;
 };
 

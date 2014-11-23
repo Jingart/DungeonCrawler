@@ -2,7 +2,15 @@
 
 
 TileMap::TileMap(void)
+	//: mTilePostions(100, std::vector<std::vector<SDL_Rect> >(100, std::vector<SDL_Rect>(100, 0)))
 {
+	vector<SDL_Rect> tempRectangles;
+	tempRectangles.resize(9);
+	tempRectangles.reserve(9);
+	for(int i = 0; i < 9; i++)
+	{
+		mTilePostions.push_back(tempRectangles);
+	}
 }
 
 
@@ -13,17 +21,18 @@ TileMap::~TileMap(void)
 
 bool TileMap::LoadAndBuildTileMap(string appPath)
 {
-	//Success flag
 	bool tilesLoaded = true;
 	Tile *tile = 0;
+	/*vector<SDL_Rect> tempRectangles;*/
+
+	int xCounter = 0;
+	int yCounter = 0;
 
     //The tile offsets
     int x = 0, y = 0;
 
-    //Open the map
     ifstream mapStream( appPath + "/dungeon.map" );
 
-    //If the map couldn't be loaded
     if( mapStream == NULL )
     {
 		printf( "Unable to load map file!\n" );
@@ -52,6 +61,25 @@ bool TileMap::LoadAndBuildTileMap(string appPath)
 			//If the number is a valid tile number
 			if( ( tileType >= 0 ) && ( tileType < TOTAL_TILE_SPRITES ) )
 			{
+
+
+				SDL_Rect rect = {x + TILE_WIDTH / 2, y + TILE_HEIGHT / 2, 0, 0};
+				mTilePostions[xCounter][yCounter] = rect;
+				//tempRectangles.push_back(rect);
+				if(xCounter < LEVEL_TILE_WIDTH - 1)
+				{
+					xCounter++;
+				}
+				else
+				{
+					//mTilePostions.push_back(tempRectangles);
+					//tempRectangles.clear();
+					xCounter = 0;
+					yCounter++;
+				}
+
+				//mTilePostions.push_back(rect);
+
 				tile = new Tile( x, y, TILE_WIDTH, TILE_HEIGHT, tileType );
 				mTileSet.push_back(*tile);
 			}
@@ -148,6 +176,12 @@ bool TileMap::LoadAndBuildTileMap(string appPath)
 void TileMap::SetTileTexture(Texture &tileTextureAtlas)
 {
 	mTileTextureAtlas = &tileTextureAtlas;
+}
+
+
+vector< vector<SDL_Rect> > TileMap::GetMapTilePositions()
+{
+	return mTilePostions;
 }
 
 
