@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Textures.h"
 
 
@@ -26,6 +27,7 @@ bool Textures::LoadTextures()
 	string appPath = Utils::GetApplicationPath();
 	appPath += "\\assets\\";
 
+	mSuccess = true;
 	mTextures.push_back(LoadTexture(appPath + "texture_atlas1.png"));
 	mTextures.push_back(LoadTexture(appPath + "texture_atlas2.png"));
 
