@@ -34,11 +34,8 @@ bool TileMap::LoadAndBuildTileMap(string appPath)
 
     ifstream mapStream( appPath + "/dungeon.map" );
 
-<<<<<<< HEAD
-    if( !mapStream.is_open())
-=======
+
     if( mapStream.fail())
->>>>>>> origin/master
     {
 		printf( "Unable to load map file!\n" );
 		tilesLoaded = false;
