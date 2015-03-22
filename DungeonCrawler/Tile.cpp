@@ -11,7 +11,8 @@ Tile::Tile( int x, int y, int w, int h, int tileType )
 	mBox.h = h; 
 	
 	//Get the tile type 
-	mType = tileType; }
+	mType = tileType; 
+}
 
 
 Tile::~Tile(void)

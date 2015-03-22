@@ -27,6 +27,7 @@ public:
 	static const int LEVEL_WIDTH = TILE_WIDTH * 9; 
 	static const int LEVEL_HEIGHT = TILE_HEIGHT * 9; 
 
+	//Type codes
 	static const int TILE_STONEFLOOR = 0; 
 	static const int TILE_GRAVELFLOOR = 1; 
 	static const int TILE_WATER = 2; 
@@ -38,7 +39,7 @@ public:
 	static const int TILE_WALL_UP = 8; 
 	static const int TILE_WALL_RIGHT = 9; 
 
-
+	//Constructor Destructor
 	TileMap(void);
 	~TileMap(void);
 

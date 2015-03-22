@@ -15,6 +15,7 @@
 #include "Utils.h"
 #include "World.h"
 #include "Character.h"
+#include "ActMessage.h"
 
 using namespace std;
 
@@ -23,7 +24,6 @@ Texture gtex;
 GameTimer gTimer;
 World *gWorld;
 //vector<Tile> *gTileSet;
-//Spaceship gShip;
 
 
 bool initSDL()
@@ -67,33 +67,34 @@ void close()
 void Update(const Uint8* keystate)
 {
 
-	/*Spaceship::Action landerAction;*/
+	actMessage actorMessage;
 
 	if(keystate[SDL_SCANCODE_UP])
 	{
-		printf("UP\n");
-		//landerAction = Spaceship::moveup;
+		actorMessage.type = messageType::MOVE_UPP;
+		gWorld->DelegateMSG(actorMessage);
 	}
 	
 	if(keystate[SDL_SCANCODE_DOWN])
 	{
-		printf("Down\n");
-		//landerAction = Spaceship::movedown;
+		actorMessage.type = messageType::MOVE_DOWN;
+		gWorld->DelegateMSG(actorMessage);
 	}
 	
 	if(keystate[SDL_SCANCODE_LEFT])
 	{
-		printf("Left\n");
-		//landerAction = Spaceship::moveleft;
+		actorMessage.type = messageType::MOVE_LEFT;
+		gWorld->DelegateMSG(actorMessage);
 	}
 
 	if(keystate[SDL_SCANCODE_RIGHT])
 	{
-		printf("Right\n");
-		//landerAction = Spaceship::moveright;
+		actorMessage.type = messageType::MOVE_RIGHT;
+		gWorld->DelegateMSG(actorMessage);
 	}
 
-	//gShip.Update(gTimer.DeltaTime(), landerAction);
+
+	gWorld->Update();
 
 }
 

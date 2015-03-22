@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <windows.h>
+#include "TileMap.h"
 
 using namespace std;
 
@@ -11,5 +12,9 @@ public:
 	//~Utils(void);
 
 	static string GetApplicationPath();
+
+	static bool CoordsOutOfBounds(int,int);
+
+
 };
 

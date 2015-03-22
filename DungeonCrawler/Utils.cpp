@@ -23,3 +23,14 @@ string Utils::GetApplicationPath()
 	string appPath(buffer);
 	return appPath;
 }
+
+bool Utils::CoordsOutOfBounds(int x, int y){
+
+	if (x < 0 || x > TileMap::LEVEL_TILE_WIDTH-1 || y < 0 || y > TileMap::LEVEL_TILE_HEIGHT-1){
+		return true;
+	}
+	else{
+		return false;
+	}
+
+}
